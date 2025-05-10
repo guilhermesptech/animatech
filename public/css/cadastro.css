@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--fonte-principal);
+}
+
+:root {
+    --cor-background: #FFFFFF;
+    --cor-primaria: #E0F0FF;
+    --cor-secundaria: #70B8FF;
+    --cor-ternaria: #1E4F91;
+    --cor-botao-hover: #163E72;
+    --fonte-principal: 'Roboto', sans-serif;
+}
+
+h1 {
+    color: var(--cor-ternaria);
+    padding: 14px;
+}
+
+main {
+    background-color: var(--cor-primaria);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-cadastro {
+    background-color: var(--cor-background);
+    color: var(--cor-ternaria);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 25rem;
+    height: 25rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+

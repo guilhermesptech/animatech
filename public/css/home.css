@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --cor-background-secao-um: #FFA500;
+    --cor-destaque-secao-um: #5D4037;
+    --cor-background-secao-dois: #FFC0CB;
+    --cor-destaque-secao-dois: #5C0A4980;
+    --cor-texto: #FFFFFF;
+    --fonte-principal: 'DynaPuff', sans-serif;
+    --fonte-navbar: 'Roboto', sans-serif;
+}
+
+.container-navegacao {
+    background-color: var(--cor-background-secao-um);
+    height: 8vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+}
+
+.container-navegacao ul {
+    display: flex;
+    gap: 6.25rem;
+    list-style: none;
+}
+
+.container-navegacao a {
+    text-decoration: none;
+    font-family: var(--fonte-navbar);
+    color: var(--cor-texto);
+    font-weight: 500;
+}
+
+.primeira-secao {
+    background-color: var(--cor-background-secao-um);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+.container-primeira-secao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6rem;
+    width: 90%;
+}
+
+.primeira-secao h1 {
+    font-family: var(--fonte-principal);
+    font-size: 4rem;
+    color: var(--cor-texto);
+}
+
+.primeira-secao span {
+    font-family: var(--fonte-principal);
+    font-size: 4rem;
+    color:  var(--cor-destaque-secao-um);
+}
+
+.primeira-secao img {
+    max-height: 40rem;
+    transition: transform 0.3s ease;
+}
+
+.primeira-secao img:hover {
+    transform: scale(1.05);
+}
+
+.segunda-secao {
+    background-color: var(--cor-background-secao-dois);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+.container-segunda-secao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6rem;
+    width: 90%;
+}
+
+.segunda-secao h1 {
+    font-family: var(--fonte-principal);
+    font-size: 3rem;
+    color: var(--cor-texto);
+}
+
+.segunda-secao span {
+    font-family: var(--fonte-principal);
+    font-size: 4rem;
+    color: var(--cor-destaque-secao-dois);
+}
+
+.segunda-secao img {
+    height: 40rem;
+    align-self: self-end;
+    transition: transform 0.3s ease;
+}
+
+.segunda-secao img:hover {
+    transform: scale(1.05);
+}

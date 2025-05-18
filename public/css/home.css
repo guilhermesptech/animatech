@@ -44,7 +44,7 @@
 
 .primeira-secao {
     background-color: var(--cor-background-secao-um);
-    height: 100vh;
+    height: 92vh;
     display: flex;
     justify-content: center;
 }

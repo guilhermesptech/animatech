@@ -18,6 +18,7 @@
 }
 
 .container-navegacao {
+    background-color: var(--cor-primaria);
     height: 8vh;
     display: flex;
     justify-content: space-between;

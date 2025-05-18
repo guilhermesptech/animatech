@@ -11,6 +11,8 @@
     --cor-destaque-secao-um: #5D4037;
     --cor-background-secao-dois: #FFC0CB;
     --cor-destaque-secao-dois: #5C0A4980;
+    --cor-background-secao-tres: #B3E5FC;
+    --cor-destaque-secao-tres: #01579B;
     --cor-texto: #FFFFFF;
     --fonte-principal: 'DynaPuff', sans-serif;
     --fonte-navbar: 'Roboto', sans-serif;
@@ -55,7 +57,7 @@
 
 .primeira-secao h1 {
     font-family: var(--fonte-principal);
-    font-size: 4rem;
+    font-size: 2.8rem;
     color: var(--cor-texto);
 }
 
@@ -91,7 +93,7 @@
 
 .segunda-secao h1 {
     font-family: var(--fonte-principal);
-    font-size: 3rem;
+    font-size: 2.8rem;
     color: var(--cor-texto);
 }
 
@@ -108,5 +110,42 @@
 }
 
 .segunda-secao img:hover {
+    transform: scale(1.05);
+}
+
+.terceira-secao {
+    background-color: var(--cor-background-secao-tres);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+.container-terceira-secao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6rem;
+    width: 90%;
+}
+
+.terceira-secao h1 {
+    font-family: var(--fonte-principal);
+    font-size: 2.8rem;
+    color: var(--cor-texto);
+}
+
+.terceira-secao span {
+    font-family: var(--fonte-principal);
+    font-size: 4rem;
+    color: var(--cor-destaque-secao-tres);
+}
+
+.terceira-secao img {
+    height: 40rem;
+    align-self: self-end;
+    transition: transform 0.3s ease;
+}
+
+.terceira-secao img:hover {
     transform: scale(1.05);
 }

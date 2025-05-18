@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar-se no Toon</title>
     <link rel="stylesheet" href="css/cadastro.css">
 </head>
+
 <body>
     <header>
         <nav class="container-navegacao">
@@ -24,13 +26,13 @@
         <div class="container-cadastro">
             <div class="container-nome-sobrenome-data_nascimento-genero-email-senha-cadastrar">
                 <div class="container-nome-sobrenome">
-                    <input type="text" id="input_nome" placeholder="Nome" required/>
-                    <input type="text" id="input_sobrenome" placeholder="Sobrenome" required/>
+                    <input type="text" id="input_nome" placeholder="Nome" required />
+                    <input type="text" id="input_sobrenome" placeholder="Sobrenome" required />
                 </div>
                 <div class="container-data_nascimento-select-genero-sexo">
                     <p>Data de nascimento</p>
                     <div class="container-select-genero">
-                        <select>
+                        <select id="select_dia">
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -64,22 +66,22 @@
                             <option value="31">31</option>
                         </select>
 
-                        <select>
-                            <option value="1">jan</option>
-                            <option value="2">fev</option>
-                            <option value="3">mar</option>
-                            <option value="4">abr</option>
-                            <option value="5">mai</option>
-                            <option value="6">jun</option>
-                            <option value="7">jul</option>
-                            <option value="8">ago</option>
-                            <option value="9">set</option>
+                        <select id="select_mes">
+                            <option value="01">jan</option>
+                            <option value="02">fev</option>
+                            <option value="03">mar</option>
+                            <option value="04">abr</option>
+                            <option value="05">mai</option>
+                            <option value="06">jun</option>
+                            <option value="07">jul</option>
+                            <option value="08">ago</option>
+                            <option value="09">set</option>
                             <option value="10">out</option>
                             <option value="11">nov</option>
                             <option value="12">dez</option>
                         </select>
 
-                        <select>
+                        <select id="select_ano">
                             <option value="2025">2025</option>
                             <option value="2024">2024</option>
                             <option value="2023">2023</option>
@@ -144,30 +146,30 @@
                     <div class="container-select-genero">
                         <div class="container-sexo">
                             Feminino
-                            <input type="radio" name="genero" value="f"/>
+                            <input type="radio" name="genero" value="f" />
                         </div>
                         <div class="container-sexo">
                             Masculino
-                            <input type="radio" name="genero" value="m"/>
+                            <input type="radio" name="genero" value="m" />
                         </div>
                         <div class="container-sexo">
                             Um outro
-                            <input type="radio" name="genero" value="o"/>
+                            <input type="radio" name="genero" value="o" />
                         </div>
                     </div>
                 </div>
                 <div class="container-usuario-email-senha">
-                    <input type="text" id="input_usuario" placeholder="Nome de usuário" required/>
+                    <input type="text" id="input_usuario" placeholder="Nome de usuário" required />
                 </div>
                 <div class="container-usuario-email-senha">
-                    <input type="email" id="input_email" placeholder="Email" required/>
+                    <input type="email" id="input_email" placeholder="Email" required />
                 </div>
                 <div class="container-usuario-email-senha">
-                    <input type="password" id="input_senha" placeholder="Senha" required/>
+                    <input type="password" id="input_senha" placeholder="Senha" required />
                 </div>
 
                 <div class="container-cadastrar">
-                    <a href="#">Cadastre-se</a>
+                    <a onclick="cadastrar()">Cadastre-se</a>
                 </div>
                 <div class="container-entrar">
                     <a href="login.html">Já tem uma conta?</a>
@@ -177,3 +179,90 @@
     </main>
 </body>
 </html>
+<script>
+    function cadastrar() {
+
+        var nomeVar = input_nome.value;
+        var sobrenomeVar = input_sobrenome.value;
+        var dataNascimentoVar = `${select_ano.value}-${select_mes.value}-${select_dia.value}`;
+        var generoVar = document.querySelector('input[name="genero"]:checked')?.value;
+        var usuarioVar = input_usuario.value;
+        var emailVar = input_email.value;
+        var senhaVar = input_senha.value;
+
+        console.log
+        (
+            "Nome " + nomeVar + "\n",
+            "Sobrenome " + sobrenomeVar + "\n",
+            "Data de nascimento " + dataNascimentoVar + "\n",
+            "Gênero " + generoVar + "\n",
+            "Usuário " + usuarioVar+ "\n",
+            "E-mail " + emailVar + "\n",
+            "Senha " + senhaVar + "\n"
+        )
+
+        if 
+        (
+            nomeVar == "" ||
+            sobrenomeVar == "" ||
+            dataNascimentoVar == "" ||
+            generoVar == "" ||
+            usuarioVar == "" ||
+            emailVar == "" ||
+            senhaVar == ""
+        ) {
+            cardErro.style.display = "block";
+            mensagem_erro.innerHTML = "(Mensagem de erro para todos os campos em branco)";
+            finalizarAguardar();
+            return false;
+        } else {
+            setInterval(sumirMensagem, 5000);
+        }
+
+        fetch("/usuarios/cadastrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                nome: nomeVar,
+                sobrenome: sobrenomeVar,
+                dataNascimento: dataNascimentoVar,
+                genero: generoVar,
+                usuario: usuarioVar,
+                email: emailVar,
+                senha: senhaVar
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    cardErro.style.display = "block";
+
+                    mensagem_erro.innerHTML =
+                        "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
+
+                    setTimeout(() => {
+                        window.location = "login.html";
+                    }, "2000");
+
+                    limparFormulario();
+                    finalizarAguardar();
+                } else {
+                    throw "Houve um erro ao tentar realizar o cadastro!";
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+                finalizarAguardar();
+            });
+
+        return false;
+    }
+
+    function sumirMensagem() {
+        cardErro.style.display = "none";
+    }
+
+</script>

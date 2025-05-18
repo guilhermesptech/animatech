@@ -108,11 +108,6 @@
 .segunda-secao img {
     height: 40rem;
     align-self: self-end;
-    transition: transform 0.3s ease;
-}
-
-.segunda-secao img:hover {
-    transform: scale(1.05);
 }
 
 .terceira-secao {
@@ -145,11 +140,6 @@
 .terceira-secao img {
     height: 40rem;
     align-self: self-end;
-    transition: transform 0.3s ease;
-}
-
-.terceira-secao img:hover {
-    transform: scale(1.05);
 }
 
 .quarta-secao {

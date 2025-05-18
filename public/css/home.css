@@ -13,6 +13,8 @@
     --cor-destaque-secao-dois: #5C0A4980;
     --cor-background-secao-tres: #B3E5FC;
     --cor-destaque-secao-tres: #01579B;
+    --cor-background-secao-quatro: #D1C4E9;
+    --cor-destaque-secao-quatro: #4527A0;
     --cor-texto: #FFFFFF;
     --fonte-principal: 'DynaPuff', sans-serif;
     --fonte-navbar: 'Roboto', sans-serif;
@@ -147,5 +149,41 @@
 }
 
 .terceira-secao img:hover {
+    transform: scale(1.05);
+}
+
+.quarta-secao {
+    background-color: var(--cor-background-secao-quatro);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+.container-quarta-secao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6rem;
+    width: 90%;
+}
+
+.quarta-secao h1 {
+    font-family: var(--fonte-principal);
+    font-size: 2.8rem;
+    color: var(--cor-texto);
+}
+
+.quarta-secao span {
+    font-family: var(--fonte-principal);
+    font-size: 4rem;
+    color: var(--cor-destaque-secao-quatro);
+}
+
+.quarta-secao img {
+    height: 40rem;
+    transition: transform 0.3s ease;
+}
+
+.quarta-secao img:hover {
     transform: scale(1.05);
 }

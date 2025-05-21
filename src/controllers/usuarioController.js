@@ -89,7 +89,63 @@ function cadastrar(req, res) {
     }
 }
 
+function atualizarImagemPerfil(req, res) {
+    var imagem_url = req.body.imagemUrl;
+    var id = req.body.usuarioId;
+
+    if (!imagem_url) {
+        console.log("URL da imagem indefinida!");
+    }
+
+    if (!id) {
+        console.log("ID do usuário indefinido!");
+    }
+
+    usuarioModel.atualizarImagemPerfil(imagem_url, id)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao atualizar! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        )
+}
+
+function retornarImagemPerfil(req, res) {
+
+    var id = req.body.usuarioId;
+
+    if (!id) {
+        console.log("O id está indefinido!");
+    }
+
+    usuarioModel.retornarImagemPerfil(id)
+        .then(
+            function (resultado) {
+                res.json(resultado[0]);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao retornar imagem de perfil! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        )
+}
+
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    atualizarImagemPerfil,
+    retornarImagemPerfil
 }

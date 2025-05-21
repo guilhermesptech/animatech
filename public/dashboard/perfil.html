@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil</title>
+    <link rel="stylesheet" href="css/perfil.css">
+    <script src="../js/sessao.js"></script>
+</head>
+
+<body onload="validarSessao(); retornarImagemPerfil();">
+    <header>
+        <nav class="container-navegacao">
+            <div class="logotipo">
+                <img src="../assets/logotipo.png" width="40px" alt="Logotipo">
+            </div>
+            <ul>
+                <li><a href="cards.html">Home</a></li>
+                <li><a href="dashboard.html">Gráficos</a></li>
+                <li><a onclick="limparSessao()">Sair</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Perfil</h1>
+        <section class="container-perfil">
+            <div class="container-perfil-conteudo">
+                <div class="container-foto-perfil">
+                    <img src="" id="foto-perfil" alt="Foto de perfil" onclick="abrirEscolhaFotoPerfil()">
+                </div>
+                <div class="container-selecionar-foto-perfil" id="div-selecionar-foto-perfil">
+                    <div class="selecionar-foto-perfil">
+                        <span class="container-fechar" onclick="fecharEscolhaFotoPerfil()">❌</span>
+                        <h3>Escolha sua nova foto de perfil</h3>
+                        <div class="lista-foto-perfil" id="div-lista-foto-perfil"></div>
+                    </div>
+                </div>
+                <h3 id="b_usuario"></h3>
+            </div>
+        </section>
+
+    </main>
+</body>
+
+</html>
+<script>
+
+    const imagens = [
+        "imagens/a-vaca-e-o-frango.png",
+        "imagens/apenas-um-show.jpg",
+        "imagens/as-meninas-super-poderosas.jpg",
+        "imagens/avatar-a-lenda-de-aang.jpg",
+        "imagens/avatar-a-lenda-de-korra.jpg",
+        "imagens/batman.jpg",
+        "imagens/ben-10.jpg",
+        "imagens/bob-esponja.jpg",
+        "imagens/coragem-o-cao-covarde.jpg",
+        "imagens/digimon.jpg",
+        "imagens/dragon-ball-z.png",
+        "imagens/gravity-falls.jpg",
+        "imagens/homem-aranha.jpg",
+        "imagens/hora-de-aventura.jpg",
+        "imagens/johnny-bravo.jpg",
+        "imagens/liga-da-justiça.jpg",
+        "imagens/luffy.png",
+        "imagens/naruto.jpg",
+        "imagens/o-laboratorio-de-dexter.jpg",
+        "imagens/os-flintstones.jpg",
+        "imagens/os-jetsons.jpg",
+        "imagens/os-simpsons.jpg",
+        "imagens/pica-pau.jpg",
+        "imagens/pokemon.jpeg",
+        "imagens/samurai-jack.jpg",
+        "imagens/scooby-doo.jpeg",
+        "imagens/steven-universo.png",
+        "imagens/tom-e-jerry.jpg",
+        "imagens/x-men-evolution.jpg",
+        "imagens/o-incrivel-mundo-de-gumball.jpeg"
+    ];
+
+    function retornarImagemPerfil() {
+
+        fetch('/usuarios/retornarImagemPerfil', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                usuarioId: sessionStorage.ID_USUARIO
+            })
+        })
+            .then(function (resposta) {
+                if (!resposta.ok) {
+                    throw new Error("Erro ao retornar imagem de perfil");
+                }
+                return resposta.json();
+            })
+            .then(function (data) {
+                console.log('Imagem de perfil retornada!');
+                document.getElementById('foto-perfil').src = data.imagem_url;
+            })
+            .catch(function (error) {
+                alert(error.message);
+            });
+    }
+
+    function abrirEscolhaFotoPerfil() {
+        const lista = document.getElementById("div-lista-foto-perfil");
+        lista.innerHTML = "";
+        let resposta = "";
+
+        for (let i = 0; i < imagens.length; i++) {
+            let caminho = imagens[i];
+            resposta += `<img src="${caminho}" onclick="atualizarImagemPerfil('${caminho}')">`
+        }
+
+        lista.innerHTML = resposta;
+        document.getElementById("div-selecionar-foto-perfil").style.display = "flex";
+    }
+
+    function fecharEscolhaFotoPerfil() {
+        document.getElementById("div-selecionar-foto-perfil").style.display = "none";
+    }
+
+    function atualizarImagemPerfil(caminho) {
+        document.getElementById("foto-perfil").src = caminho;
+
+        fecharEscolhaFotoPerfil();
+
+        fetch('/usuarios/atualizarImagemPerfil', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                imagemUrl: caminho,
+                usuarioId: sessionStorage.ID_USUARIO
+            })
+        }).then(function (response) {
+            if (response.ok) {
+                console.log('Perfil atualizado com sucesso!');
+            } else {
+                alert('Erro ao atualizar perfil');
+            }
+        });
+    }
+
+</script>

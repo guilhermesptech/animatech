@@ -9,7 +9,7 @@
     <script src="../js/sessao.js"></script>
 </head>
 
-<body onload="validarSessao(); retornarImagemPerfil();">
+<body onload="validarSessao(); retornarImagemPerfil(); retornarPodio();">
     <header>
         <nav class="container-navegacao">
             <div class="logotipo">
@@ -39,11 +39,24 @@
                 <h3 id="b_usuario"></h3>
             </div>
         </section>
+        <section class="container-desenhos-mais-curtidos">
+            <h2>Olá, Guigo!</h2>
+            <h2>Estes são os seus desenhos favoritos ⭐</h2>
+            <div class="container-podio">
+                <div id="container-segundo-lugar" class="container-segundo-lugar"></div>
+                <div id="container-primeiro-lugar" class="container-primeiro-lugar"></div>
+                <div id="container-terceiro-lugar" class="container-terceiro-lugar"></div>
+            </div>
+        </section>
+        <section class="container-generos-mais-curtidos">
+
+        </section>
 
     </main>
 </body>
 
 </html>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 
     const imagens = [
@@ -76,7 +89,9 @@
         "imagens/steven-universo.png",
         "imagens/tom-e-jerry.jpg",
         "imagens/x-men-evolution.jpg",
-        "imagens/o-incrivel-mundo-de-gumball.jpeg"
+        "imagens/o-incrivel-mundo-de-gumball.jpeg",
+        "imagens/perfil-masculino.png",
+        "imagens/perfil-feminino.png"
     ];
 
     function retornarImagemPerfil() {
@@ -124,6 +139,7 @@
     }
 
     function atualizarImagemPerfil(caminho) {
+
         document.getElementById("foto-perfil").src = caminho;
 
         fecharEscolhaFotoPerfil();
@@ -144,6 +160,36 @@
                 alert('Erro ao atualizar perfil');
             }
         });
+    }
+
+    function retornarPodio() {
+        fetch('/desenhos/top3')
+            .then(function (resposta) {
+                if (!resposta.ok) {
+                    console.log("Erro ao buscar top 3 desenhos");
+                }
+                return resposta.json();
+            })
+            .then(desenhos => {
+                if (desenhos.length === 3) {
+                    document.getElementById('container-primeiro-lugar').innerHTML = `
+                    <img src="${desenhos[0].imagem_url}" alt="Primeiro lugar" class="imagem-podio">
+                    `;
+
+                    document.getElementById('container-segundo-lugar').innerHTML = `
+                    <img src="${desenhos[1].imagem_url}" alt="Segundo lugar" class="imagem-podio">
+                    `;
+
+                    document.getElementById('container-terceiro-lugar').innerHTML = `
+                    <img src="${desenhos[2].imagem_url}" alt="Terceiro lugar" class="imagem-podio">
+                    `;
+                } else {
+                    console.log("Não foram retornados 3 desenhos");
+                }
+            })
+            .catch(function (erro) {
+                console.log("Erro ao carregar o pódio ", erro);
+            });
     }
 
 </script>

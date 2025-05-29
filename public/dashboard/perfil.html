@@ -9,7 +9,7 @@
     <script src="../js/sessao.js"></script>
 </head>
 
-<body onload="validarSessao(); retornarImagemPerfil(); retornarPodio();">
+<body onload="validarSessao(); retornarImagemPerfil(); retornarPodio(); generosMaisCurtidos();">
     <header>
         <nav class="container-navegacao">
             <div class="logotipo">
@@ -41,7 +41,7 @@
         </section>
         <section class="container-desenhos-mais-curtidos">
             <h2>Olá, Guigo!</h2>
-            <h2>Estes são os seus desenhos favoritos ⭐</h2>
+            <p>Este é o seu top 3 desenhos favoritos ⭐</p>
             <div class="container-podio">
                 <div id="container-segundo-lugar" class="container-segundo-lugar"></div>
                 <div id="container-primeiro-lugar" class="container-primeiro-lugar"></div>
@@ -49,7 +49,12 @@
             </div>
         </section>
         <section class="container-generos-mais-curtidos">
-
+            <div class="grafico-generos-mais-curtidos">
+                <p>Gêneros que você mais curte no momento!</p>
+                <canvas id="graficoGenero" width="50px" height="100px"></canvas>
+                <p>Seu gênero favorito é: </p>
+                <div id="container-genero-favorito"></div>
+            </div>
         </section>
 
     </main>
@@ -93,6 +98,12 @@
         "imagens/perfil-masculino.png",
         "imagens/perfil-feminino.png"
     ];
+
+    const generos = [
+        "imagens/icone-genero/aventura.png",
+        "imagens/icone-genero/infantil.png",
+        "imagens/icone-genero/suspense.png"
+    ]
 
     function retornarImagemPerfil() {
 
@@ -163,6 +174,7 @@
     }
 
     function retornarPodio() {
+
         fetch('/desenhos/top3')
             .then(function (resposta) {
                 if (!resposta.ok) {
@@ -192,4 +204,65 @@
             });
     }
 
+    function generosMaisCurtidos() {
+
+        fetch('/desenhos/generosMaisCurtidos')
+            .then(function (resposta) {
+                if (!resposta.ok) {
+                    console.log("Erro ao buscar top 3 gêneros");
+                }
+                return resposta.json();
+            })
+            .then(function (generos) {
+                console.log(generos); 
+                if (generos.length === 4) {
+                    const labels = [];
+                    const data = [];
+                    let curtidas = 0;
+                    let imagemMaisCurtida = "";
+
+                    for (let i = 0; i < generos.length; i++) {
+
+                        if (generos[i].curtidas_genero > curtidas) {
+                            curtidas = generos[i].curtidas_genero;
+                            imagemMaisCurtida = generos[i].imagem_url;
+                        }
+                        labels.push(generos[i].nome);
+                        data.push(generos[i].curtidas_genero);
+                    }
+
+                    console.log("Endereço da imagem: " + imagemMaisCurtida);
+
+                    document.getElementById('container-genero-favorito').innerHTML = `
+                    <img src="${imagemMaisCurtida}" alt="Gênero mais curtido" class="genero_favorito">
+                `;
+
+                    const grafico = document.getElementById('graficoGenero').getContext('2d');
+
+                    new Chart(grafico, {
+                        type: 'doughnut',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Curtidas',
+                                data: data,
+                                backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 206, 86)', 'rgb(0, 255, 0)'],
+                                borderColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 206, 86)', 'rgb(0, 255, 0 )'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            }
+                        }
+                    })
+                }
+            })
+            .catch(function (erro) {
+                console.log("Erro ao buscar top 3 gêneros:", erro);
+            })
+    }
 </script>

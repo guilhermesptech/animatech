@@ -197,3 +197,27 @@ main {
 .container-podio img:hover {
     transform: scale(1.05);
 }
+
+.container-generos-mais-curtidos {
+    background-color: var(--cor-background);
+    width: 70%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    padding-top: 40px;
+}
+
+.grafico-generos-mais-curtidos {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+}
+
+.genero_favorito {
+    width: 200px;
+}

@@ -18,12 +18,12 @@
             <ul>
                 <li><a href="cards.html">Home</a></li>
                 <li><a href="dashboard.html">Gráficos</a></li>
+                <li><a href="perfil.html"><strong>Perfil</strong></a></li>
                 <li><a onclick="limparSessao()">Sair</a></li>
             </ul>
         </nav>
     </header>
     <main>
-        <h1>Perfil</h1>
         <section class="container-perfil">
             <div class="container-perfil-conteudo">
                 <div class="container-foto-perfil">
@@ -40,23 +40,28 @@
             </div>
         </section>
         <section class="container-desenhos-mais-curtidos">
-            <h2>Olá, Guigo!</h2>
+            <h2>Olá,
+                <span id="n_usuario"></span>!
+            </h2>
             <p>Este é o seu top 3 desenhos favoritos ⭐</p>
             <div class="container-podio">
-                <div id="container-segundo-lugar" class="container-segundo-lugar"></div>
-                <div id="container-primeiro-lugar" class="container-primeiro-lugar"></div>
-                <div id="container-terceiro-lugar" class="container-terceiro-lugar"></div>
+                <div id="container-segundo-lugar" class="container-lugar segundo-lugar"></div>
+                <div id="container-primeiro-lugar" class="container-lugar primeiro-lugar"></div>
+                <div id="container-terceiro-lugar" class="container-lugar terceiro-lugar"></div>
             </div>
         </section>
         <section class="container-generos-mais-curtidos">
             <div class="grafico-generos-mais-curtidos">
-                <p>Gêneros que você mais curte no momento!</p>
-                <canvas id="graficoGenero" width="50px" height="100px"></canvas>
-                <p>Seu gênero favorito é: </p>
-                <div id="container-genero-favorito"></div>
+                <p>Gêneros que você mais curte no momento!👍🏻</p>
+                <canvas id="graficoGenero"></canvas>
             </div>
         </section>
-
+        <section class="container-leitura-informacoes">
+            <p>O que seus gêneros favoritos dizem sobre você 🤔</p>
+            <div id="container_titulo" class="container-titulo"></div>
+            <div id="container_imagem_leitura_perfil" class="container-imagem-leitura-perfil"></div>
+            <div id="container_leitura_perfil" class="container-leitura-perfil"></div>
+        </section>
     </main>
 </body>
 
@@ -98,12 +103,6 @@
         "imagens/perfil-masculino.png",
         "imagens/perfil-feminino.png"
     ];
-
-    const generos = [
-        "imagens/icone-genero/aventura.png",
-        "imagens/icone-genero/infantil.png",
-        "imagens/icone-genero/suspense.png"
-    ]
 
     function retornarImagemPerfil() {
 
@@ -206,36 +205,29 @@
 
     function generosMaisCurtidos() {
 
+        let generoTopUm = "";
+        let generoTopDois = "";
+
         fetch('/desenhos/generosMaisCurtidos')
             .then(function (resposta) {
                 if (!resposta.ok) {
-                    console.log("Erro ao buscar top 3 gêneros");
+                    console.log("Erro ao buscar gêneros");
                 }
                 return resposta.json();
             })
             .then(function (generos) {
-                console.log(generos); 
-                if (generos.length === 4) {
+                console.log(generos);
+                if (generos.length > 1) {
+
                     const labels = [];
                     const data = [];
-                    let curtidas = 0;
-                    let imagemMaisCurtida = "";
+                    generoTopUm = generos[0].nome;
+                    generoTopDois = generos[1].nome;
 
                     for (let i = 0; i < generos.length; i++) {
-
-                        if (generos[i].curtidas_genero > curtidas) {
-                            curtidas = generos[i].curtidas_genero;
-                            imagemMaisCurtida = generos[i].imagem_url;
-                        }
                         labels.push(generos[i].nome);
                         data.push(generos[i].curtidas_genero);
                     }
-
-                    console.log("Endereço da imagem: " + imagemMaisCurtida);
-
-                    document.getElementById('container-genero-favorito').innerHTML = `
-                    <img src="${imagemMaisCurtida}" alt="Gênero mais curtido" class="genero_favorito">
-                `;
 
                     const grafico = document.getElementById('graficoGenero').getContext('2d');
 
@@ -246,8 +238,8 @@
                             datasets: [{
                                 label: 'Curtidas',
                                 data: data,
-                                backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 206, 86)', 'rgb(0, 255, 0)'],
-                                borderColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 206, 86)', 'rgb(0, 255, 0 )'],
+                                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#00FF00'],
+                                borderColor: ['#FF6384', '#36A2EB', '#FFCE56', '#00FF00'],
                                 borderWidth: 1
                             }]
                         },
@@ -258,11 +250,26 @@
                                 }
                             }
                         }
-                    })
+                    });
+
+                    if (generoTopUm == "Anime" && generoTopDois == "Infantil" || generoTopUm == "Infantil" && generoTopDois == "Anime") {
+                        container_titulo.innerHTML = "Otaku de Pijaminha!"
+                        container_leitura_perfil.innerHTML = "Você ama a cultura japonesa, mas também adora reviver memórias da sua infância!";
+                        document.getElementById('container_imagem_leitura_perfil').innerHTML = `
+                        <img src="imagens/imagem_analise_perfil/infantil&anime.jpg">`;
+
+                    };
+
+                    if (generoTopUm == "Comédia" && generoTopDois == "Infantil" || generoTopUm == "Infantil" && generoTopDois == "Comédia") {
+                        container_titulo.innerHTML = "Risadinhas ou Travessuras?!"
+                        container_leitura_perfil.innerHTML = "Você adora reviver momentos marcantes da sua infância dando boas risadas!";
+                        document.getElementById('container_imagem_leitura_perfil').innerHTML = `
+                        <img src="imagens/imagem_analise_perfil/infantil&comedia.jpg">`;
+                    }
                 }
             })
             .catch(function (erro) {
-                console.log("Erro ao buscar top 3 gêneros:", erro);
+                console.log("Erro ao buscar top gêneros:", erro);
             })
     }
 </script>

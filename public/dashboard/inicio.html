@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Início</title>
+    <link rel="stylesheet" href="css/inicio.css">
+    <script src="../js/sessao.js"></script>
+</head>
+
+<body onload="listarDesenhos(); validarSessao();";>
+    <header>
+        <nav class="container-navegacao">
+            <div class="logotipo">
+                <img src="assets/logotipo.png" width="40px" alt="Logotipo">
+            </div>
+            <ul>
+                <li><a href="inicio.html"><strong>Votatoon</strong></a></li>
+                <li><a href="dashboard.html">Gráficos</a></li>
+                <li><a href="perfil.html">Perfil</a></li>
+                <li><a onclick="limparSessao()">Sair</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="container-apresentacao-descricao">
+            <div class="container-titulo">
+                <h1>VOTATOON</h1>
+                <h2>UM DUELO INSANO ENTRE DESENHOS ANIMADOS!</h2>
+                <p>Vote no seu preferido e acompanhe o ranking dos campeões.</p>
+            </div>
+        </section>
+        <section class="container-apresentacao-descricao-dois">
+            <div class="container-descricao-dois">
+                <div class="container-opcoes">
+                    <p>🗳️ Vote.</p>
+                    <p>🔥 Torça.</p>
+                    <p>🏆 Veja quem lidera o pódio dos desenhos!</p>
+                </div>
+            </div>
+        </section>
+        <section class="container-informacoes-desenho-navegar">
+            <div class="container-informacoes-desenho">
+                <h3 id="nome"></h3>
+                <img id="imagem">
+                <p id="descricao"></p>
+            </div>
+            <div onclick="votar()" class="container-votar">
+                Votar
+            </div>
+            <div class="container-navegar">
+                <div onclick="exibirAnterior()">Próximo</div>
+                <div onclick="exibirProximo()">Anterior</div>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>
+    <script>
+
+        let desenhos = [];
+        let posicaoAtual = 0;
+
+        function listarDesenhos() {
+
+            fetch('/desenhos/listarDesenhos')
+                .then(function (resposta) {
+                    if (!resposta.ok) {
+                        console.log('Erro na listagem de desenhos');
+                    }
+                    return resposta.json();
+                })
+                .then(function (informacoes) {
+                    desenhos = informacoes;
+                    exibirInformacoesDesenho(posicaoAtual)
+                })
+        }
+
+        function exibirInformacoesDesenho(indice) {
+            document.getElementById("nome").innerHTML = desenhos[posicaoAtual].nome;
+            document.getElementById("imagem").src = desenhos[posicaoAtual].imagem_url;
+            document.getElementById("descricao").innerHTML = desenhos[posicaoAtual].descricao;
+        }
+
+        function exibirProximo() {
+            if (posicaoAtual < desenhos.length - 1) {
+                posicaoAtual++;
+            } else {
+                posicaoAtual = 0;
+            }
+            exibirInformacoesDesenho(posicaoAtual);
+        }
+
+        function exibirAnterior() {
+            if (posicaoAtual > 0) {
+                posicaoAtual--;
+            } else {
+                posicaoAtual = desenhos.length - 1;
+            }
+            exibirInformacoesDesenho(posicaoAtual);
+        }
+
+        function votar() {
+
+            fetch('/desenhos/votar', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id: desenhos[posicaoAtual].id
+                }),
+            })
+                .then(function (resposta) {
+                    if (!resposta.ok) {
+                        console.log('Erro na votação');
+                        return resposta.json();
+                    }
+                })
+                .then(function (dados) {
+                    console.log("Votação registrada com sucesso", dados);
+                });
+        }
+
+    </script>

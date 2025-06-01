@@ -22,7 +22,33 @@ function generosMaisCurtidos(req, res) {
         })
 }
 
+function listarDesenhos(req, res) {
+    desenhoModel.listarDesenhos()
+        .then(function (resultado) {
+            res.json(resultado)
+        })
+        .catch(function (erro) {
+            console.log("Erro na listagem de desenhos", erro);
+            res.json({ erro: "Erro na listagem" });
+        })
+}
+
+function votar(req, res) {
+    var id = req.body.id;
+
+    desenhoModel.votar(id)
+        .then(function (resultado) {
+            res.json(resultado)
+        })
+        .catch(function (erro) {
+            console.log("Erro na votação", erro);
+            res.json({ erro: "Erro na votação" });
+        })
+}
+
 module.exports = {
     top3,
-    generosMaisCurtidos
+    generosMaisCurtidos,
+    listarDesenhos,
+    votar
 }

@@ -1,5 +1,4 @@
 var usuarioModel = require("../models/usuarioModel");
-var aquarioModel = require("../models/aquarioModel");
 
 function autenticar(req, res) {
     var usuario = req.body.usuario;
@@ -147,9 +146,39 @@ function retornarImagemPerfil(req, res) {
         )
 }
 
+function salvarDataHoraAcesso(req, res) {
+    var usuarioId = req.body.id;
+
+    if (usuarioId != null) {
+        usuarioModel.salvarDataHoraAcesso(usuarioId)
+            .then(function (resultado) {
+                res.json(resultado);
+            })
+            .catch(function (erro) {
+                console.log(erro);
+            })
+    }
+}
+
+function exibirMesMaisAcessadoPeloUsuario(req, res) {
+    var usuarioId = req.params.usuarioId;
+
+    if (usuarioId != null) {
+        usuarioModel.exibirMesMaisAcessadoPeloUsuario(usuarioId)
+            .then(function (resultado) {
+                res.json(resultado);
+            })
+            .catch(function (erro) {
+                console.log(erro);
+            })
+    }
+}
+
 module.exports = {
     autenticar,
     cadastrar,
     atualizarImagemPerfil,
-    retornarImagemPerfil
+    retornarImagemPerfil,
+    salvarDataHoraAcesso,
+    exibirMesMaisAcessadoPeloUsuario
 }

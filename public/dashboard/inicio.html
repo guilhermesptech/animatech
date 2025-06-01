@@ -9,11 +9,11 @@
     <script src="../js/sessao.js"></script>
 </head>
 
-<body onload="listarDesenhos(); validarSessao();";>
+<body onload="exibirTodosOsDesenhos(); validarSessao();" ;>
     <header>
         <nav class="container-navegacao">
             <div class="logotipo">
-                <img src="assets/logotipo.png" width="40px" alt="Logotipo">
+                <img src="./../assets/logotipo.png" width="40px" alt="Logotipo">
             </div>
             <ul>
                 <li><a href="inicio.html"><strong>Votatoon</strong></a></li>
@@ -34,9 +34,9 @@
         <section class="container-apresentacao-descricao-dois">
             <div class="container-descricao-dois">
                 <div class="container-opcoes">
-                    <p>🗳️ Vote.</p>
-                    <p>🔥 Torça.</p>
-                    <p>🏆 Veja quem lidera o pódio dos desenhos!</p>
+                    <p>Vote.</p>
+                    <p>Torça.</p>
+                    <p>Veja quem lidera o pódio dos desenhos!</p>
                 </div>
             </div>
         </section>
@@ -58,70 +58,71 @@
 </body>
 
 </html>
-    <script>
+<script>
 
-        let desenhos = [];
-        let posicaoAtual = 0;
+    let desenhos = [];
+    let posicaoAtual = 0;
 
-        function listarDesenhos() {
+    function exibirTodosOsDesenhos() {
 
-            fetch('/desenhos/listarDesenhos')
-                .then(function (resposta) {
-                    if (!resposta.ok) {
-                        console.log('Erro na listagem de desenhos');
-                    }
-                    return resposta.json();
-                })
-                .then(function (informacoes) {
-                    desenhos = informacoes;
-                    exibirInformacoesDesenho(posicaoAtual)
-                })
-        }
-
-        function exibirInformacoesDesenho(indice) {
-            document.getElementById("nome").innerHTML = desenhos[posicaoAtual].nome;
-            document.getElementById("imagem").src = desenhos[posicaoAtual].imagem_url;
-            document.getElementById("descricao").innerHTML = desenhos[posicaoAtual].descricao;
-        }
-
-        function exibirProximo() {
-            if (posicaoAtual < desenhos.length - 1) {
-                posicaoAtual++;
-            } else {
-                posicaoAtual = 0;
-            }
-            exibirInformacoesDesenho(posicaoAtual);
-        }
-
-        function exibirAnterior() {
-            if (posicaoAtual > 0) {
-                posicaoAtual--;
-            } else {
-                posicaoAtual = desenhos.length - 1;
-            }
-            exibirInformacoesDesenho(posicaoAtual);
-        }
-
-        function votar() {
-
-            fetch('/desenhos/votar', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    id: desenhos[posicaoAtual].id
-                }),
+        fetch('/desenhos/exibirTodosOsDesenhos')
+            .then(function (resposta) {
+                if (!resposta.ok) {
+                    console.log('Erro na exibição dos desenhos');
+                }
+                return resposta.json();
             })
-                .then(function (resposta) {
-                    if (!resposta.ok) {
-                        console.log('Erro na votação');
-                        return resposta.json();
-                    }
-                })
-                .then(function (dados) {
-                    console.log("Votação registrada com sucesso", dados);
-                });
-        }
+            .then(function (informacoes) {
+                desenhos = informacoes;
+                exibirInformacoesDosDesenhos(posicaoAtual);
+            })
+    }
 
-    </script>
+    function exibirInformacoesDosDesenhos(indice) {
+        document.getElementById("nome").innerHTML = desenhos[posicaoAtual].nome;
+        document.getElementById("imagem").src = desenhos[posicaoAtual].imagem_url;
+        document.getElementById("descricao").innerHTML = desenhos[posicaoAtual].descricao;
+    }
+
+    function exibirProximo() {
+        if (posicaoAtual < desenhos.length - 1) {
+            posicaoAtual++;
+        } else {
+            posicaoAtual = 0;
+        }
+        exibirInformacoesDosDesenhos(posicaoAtual);
+    }
+
+    function exibirAnterior() {
+        if (posicaoAtual > 0) {
+            posicaoAtual--;
+        } else {
+            posicaoAtual = desenhos.length - 1;
+        }
+        exibirInformacoesDosDesenhos(posicaoAtual);
+    }
+
+    function votar() {
+
+        fetch('/desenhos/votar', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                usuarioId: sessionStorage.getItem("ID_USUARIO"),
+                desenhoId: desenhos[posicaoAtual].id
+            }),
+        })
+            .then(function (resposta) {
+                if (!resposta.ok) {
+                    console.log('Erro na votação');
+                }
+                return resposta.json();
+            })
+            .then(function (dados) {
+                console.log("Voto salvo com sucesso", dados);
+            });
+    }
+
+</script>

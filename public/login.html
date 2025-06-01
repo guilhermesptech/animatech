@@ -115,6 +115,8 @@
                     sessionStorage.GENERO = json.genero;
                     sessionStorage.ID_USUARIO = json.id;
 
+                    salvarDataHoraAcesso();
+
                     setTimeout(function () {
                         window.location = "./dashboard/inicio.html";
                     }, 1000);
@@ -139,5 +141,26 @@
 
     function sumirMensagem() {
         cardErro.style.display = "none"
+    }
+
+    function salvarDataHoraAcesso(id) {
+        fetch("/usuarios/salvarDataHoraAcesso", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id: sessionStorage.getItem("ID_USUARIO")
+            })
+        })
+            .then(function (resposta) {
+                if (!resposta.ok) {
+                    console.log("Erro ao inserir data e hora do acesso")
+                }
+                return resposta.json();
+            })
+            .then(function (acesso) {
+                console.log(acesso)
+            })
     }
 </script>

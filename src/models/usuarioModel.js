@@ -39,8 +39,42 @@ function retornarImagemPerfil(id) {
     var instrucaoSql = `
         SELECT imagem_url FROM usuario WHERE id = '${id}';
     `;
-    
+
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+function salvarDataHoraAcesso(id) {
+    var instrucaoSql = `
+        INSERT INTO acesso_usuario
+        (
+            fkusuario
+        )
+        VALUES
+        (
+            ${id}
+        );
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+function exibirMesMaisAcessadoPeloUsuario(usuarioId) {
+    var instrucaoSql = `
+        SELECT
+            MONTH(data_acesso) AS mes,
+            COUNT(*) AS total_acessos
+        FROM
+            acesso_usuario
+        WHERE
+            fkusuario = ${usuarioId}
+        GROUP BY
+            mes
+        ORDER BY 
+            mes;
+    `;
+
+    console.log("Executando a instrução SQL (exibir o mês mais acessado): \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
 
@@ -48,5 +82,7 @@ module.exports = {
     autenticar,
     cadastrar,
     atualizarImagemPerfil,
-    retornarImagemPerfil
+    retornarImagemPerfil,
+    salvarDataHoraAcesso,
+    exibirMesMaisAcessadoPeloUsuario
 };

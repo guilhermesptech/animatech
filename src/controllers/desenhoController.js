@@ -1,42 +1,49 @@
 var desenhoModel = require("../models/desenhoModel");
 
-function top3(req, res) {
-    desenhoModel.top3()
+function exibirPodioDoUsuario(req, res) {
+
+    const usuarioId = req.params.usuarioId;
+
+    desenhoModel.exibirPodioDoUsuario(usuarioId)
         .then(function (resultado) {
             res.json(resultado);
         })
         .catch(function (erro) {
-            console.log("Erro ao buscar o top 3", erro);
+            console.log("Erro ao buscar o pódio do usuário", erro);
             res.json({ erro: "Erro na busca" });
         })
 }
 
-function generosMaisCurtidos(req, res) {
-    desenhoModel.generosMaisCurtidos()
+function exibirOsGenerosPreferidosDoUsuario(req, res) {
+
+    const usuarioId = req.params.usuarioId;
+
+    desenhoModel.exibirOsGenerosPreferidosDoUsuario(usuarioId)
         .then(function (resultado) {
             res.json(resultado);
         })
         .catch(function (erro) {
-            console.log("Erro ao buscar os gêneros mais curtidos", erro);
+            console.log("Erro ao buscar os gêneros preferidos do usuário", erro);
             res.json({ erro: "Erro na busca" });
         })
 }
 
-function listarDesenhos(req, res) {
-    desenhoModel.listarDesenhos()
+function exibirTodosOsDesenhos(req, res) {
+    desenhoModel.exibirTodosOsDesenhos()
         .then(function (resultado) {
             res.json(resultado)
         })
         .catch(function (erro) {
-            console.log("Erro na listagem de desenhos", erro);
+            console.log("Erro na exibição dos desenhos", erro);
             res.json({ erro: "Erro na listagem" });
         })
 }
 
 function votar(req, res) {
-    var id = req.body.id;
+    var usuarioId = req.body.usuarioId;
+    var desenhoId = req.body.desenhoId;
 
-    desenhoModel.votar(id)
+    desenhoModel.votar(usuarioId, desenhoId)
         .then(function (resultado) {
             res.json(resultado)
         })
@@ -47,8 +54,8 @@ function votar(req, res) {
 }
 
 module.exports = {
-    top3,
-    generosMaisCurtidos,
-    listarDesenhos,
+    exibirPodioDoUsuario,
+    exibirOsGenerosPreferidosDoUsuario,
+    exibirTodosOsDesenhos,
     votar
 }

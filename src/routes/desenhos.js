@@ -3,16 +3,16 @@ var router = express.Router();
 
 var desenhoController = require("../controllers/desenhoController");
 
-router.get("/top3", function (req, res) {
-    desenhoController.top3(req, res);
+router.get("/exibirPodioDoUsuario/:usuarioId", function (req, res) {
+    desenhoController.exibirPodioDoUsuario(req, res);
 });
 
-router.get("/generosMaisCurtidos", function (req, res) {
-    desenhoController.generosMaisCurtidos(req, res);
+router.get("/exibirOsGenerosPreferidosDoUsuario/:usuarioId", function (req, res) {
+    desenhoController.exibirOsGenerosPreferidosDoUsuario(req, res);
 })
 
-router.get("/listarDesenhos", function (req, res) {
-    desenhoController.listarDesenhos(req, res);
+router.get("/exibirTodosOsDesenhos", function (req, res) {
+    desenhoController.exibirTodosOsDesenhos(req, res);
 }) 
 
 router.post("/votar", function (req, res) {

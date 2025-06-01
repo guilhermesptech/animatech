@@ -21,4 +21,13 @@ router.post("/retornarImagemPerfil", function (req, res) {
     usuarioController.retornarImagemPerfil(req, res);
 });
 
+// Controle de acesso
+router.post("/salvarDataHoraAcesso", function (req, res) {
+    usuarioController.salvarDataHoraAcesso(req, res);
+});
+
+router.get("/exibirMesMaisAcessadoPeloUsuario/:usuarioId", function (req, res) {
+    usuarioController.exibirMesMaisAcessadoPeloUsuario(req, res);
+});
+
 module.exports = router;

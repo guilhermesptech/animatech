@@ -25,6 +25,29 @@ function exibirPodioDoUsuario(usuarioId) {
     return database.executar(instrucaoSql);
 }
 
+function exibirPodioGeral() {
+    const instrucaoSql = `
+        SELECT 
+            d.nome AS nome_desenho,
+            d.descricao,
+            d.imagem_url,
+            v.quantidade_votos
+        FROM 
+	        voto v
+        INNER JOIN 
+	        desenho d ON v.fkdesenho = d.id
+        INNER JOIN 
+	        usuario u ON v.fkusuario = u.id
+        ORDER BY 
+            v.quantidade_votos DESC
+        LIMIT 
+            3;
+    `;
+
+    console.log("Executando a instrução SQL (exibir pódio geral): \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 function exibirOsGenerosPreferidosDoUsuario(usuarioId) {
     const instrucaoSql = `
         SELECT 
@@ -47,6 +70,29 @@ function exibirOsGenerosPreferidosDoUsuario(usuarioId) {
     `;
 
     console.log("Executando a instrução SQL (exibir os gêneros preferidos do usuário): \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+function exibirOsGenerosPreferidosNoGeral() {
+    const instrucaoSql = `
+        SELECT 
+	        g.nome,
+            SUM(v.quantidade_votos) as 'total_votos'
+        FROM
+	        voto v
+        INNER JOIN
+	        desenho d ON d.id = v.fkdesenho
+        INNER JOIN
+            genero g ON d.fkgenero = g.id
+        GROUP BY
+	        g.nome
+        ORDER BY
+	        total_votos DESC
+        LIMIT 
+            5;
+    `;
+
+    console.log("Executando a instrução SQL (exibir os gêneros preferidos no geral): \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
 
@@ -136,7 +182,9 @@ function votar(usuarioId, desenhoId) {
 
 module.exports = {
     exibirPodioDoUsuario,
+    exibirPodioGeral,
     exibirOsGenerosPreferidosDoUsuario,
+    exibirOsGenerosPreferidosNoGeral,
     exibirTodosOsDesenhos,
     votar
 };

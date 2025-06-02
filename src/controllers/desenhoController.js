@@ -14,6 +14,18 @@ function exibirPodioDoUsuario(req, res) {
         })
 }
 
+function exibirPodioGeral(req, res) {
+
+    desenhoModel.exibirPodioGeral()
+        .then(function (resultado) {
+            res.json(resultado);
+        })
+        .catch(function (erro) {
+            console.log("Erro ao buscar o pódio geral", erro);
+            res.json({ erro: "Erro na busca" });
+        })
+}
+
 function exibirOsGenerosPreferidosDoUsuario(req, res) {
 
     const usuarioId = req.params.usuarioId;
@@ -24,6 +36,18 @@ function exibirOsGenerosPreferidosDoUsuario(req, res) {
         })
         .catch(function (erro) {
             console.log("Erro ao buscar os gêneros preferidos do usuário", erro);
+            res.json({ erro: "Erro na busca" });
+        })
+}
+
+function exibirOsGenerosPreferidosNoGeral(req, res) {
+
+    desenhoModel.exibirOsGenerosPreferidosNoGeral()
+        .then(function (resultado) {
+            res.json(resultado);
+        })
+        .catch(function (erro) {
+            console.log("Erro ao buscar os gêneros preferidos no geral", erro);
             res.json({ erro: "Erro na busca" });
         })
 }
@@ -55,7 +79,9 @@ function votar(req, res) {
 
 module.exports = {
     exibirPodioDoUsuario,
+    exibirPodioGeral,
     exibirOsGenerosPreferidosDoUsuario,
+    exibirOsGenerosPreferidosNoGeral,
     exibirTodosOsDesenhos,
     votar
 }

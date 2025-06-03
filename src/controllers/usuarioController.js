@@ -135,10 +135,21 @@ function exibirMesMaisAcessadoPeloUsuario(req, res) {
     }
 }
 
+function exibirMesMaisAcessadoNoGeral(req, res) {
+    usuarioModel.exibirMesMaisAcessadoNoGeral()
+        .then(function (resultado) {
+            res.json(resultado);
+        })
+        .catch(function (erro) {
+            console.log(erro);
+        })
+}
+
 module.exports = {
     autenticar,
     cadastrar,
     exibirFotoDoUsuario,
     salvarDataHoraAcesso,
-    exibirMesMaisAcessadoPeloUsuario
+    exibirMesMaisAcessadoPeloUsuario,
+    exibirMesMaisAcessadoNoGeral
 }

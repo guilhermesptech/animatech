@@ -70,10 +70,28 @@ function exibirMesMaisAcessadoPeloUsuario(usuarioId) {
     return database.executar(instrucaoSql);
 }
 
+function exibirMesMaisAcessadoNoGeral() {
+    var instrucaoSql = `
+        SELECT
+            MONTH(data_acesso) AS mes,
+            COUNT(*) AS total_acessos
+        FROM
+            acesso_usuario
+        GROUP BY
+            mes
+        ORDER BY 
+            mes;
+    `;
+
+    console.log("Executando a instrução SQL (exibir o mês mais acessado no geral): \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     autenticar,
     cadastrar,
     exibirFotoDoUsuario,
     salvarDataHoraAcesso,
-    exibirMesMaisAcessadoPeloUsuario
+    exibirMesMaisAcessadoPeloUsuario,
+    exibirMesMaisAcessadoNoGeral
 };

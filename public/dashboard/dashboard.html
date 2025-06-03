@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
 
-<body onload="exibirPodioGeral(); exibirGenerosPreferidosNoGeral()">
+<body onload="exibirPodioGeral(); exibirGenerosPreferidosNoGeral(); exibirMesMaisAcessadoNoGeral()">
     <header>
         <nav class="container-navegacao">
             <div class="logotipo">
@@ -40,6 +40,19 @@
                     <div id="generoMaisVotado"></div>
                     <div id="totalDeVotos"></div>
                     <div id="mediaDeVotos"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="container-meses-mais-acessados">
+        <div class="grafico-meses-mais-acessados">
+            <p>Meses em que o site teve mais acessos!</p>
+            <canvas id="graficoMeses"></canvas>
+            <div class="indicadores-grafico">
+                <div class="kpis">
+                    <div id="mesMaisAcessado"></div>
+                    <div id="totalDeAcessos"></div>
+                    <div id="mediaDeAcessos"></div>
                 </div>
             </div>
         </div>
@@ -143,6 +156,95 @@
                             plugins: {
                                 legend: {
                                     display: false
+                                }
+                            }
+                        }
+                    });
+                }
+            })
+    }
+
+    function exibirMesMaisAcessadoNoGeral() {
+
+        fetch(`/usuarios/exibirMesMaisAcessadoNoGeral`)
+            .then(function (resposta) {
+                if (!resposta.ok) {
+                    console.log("Erro ao exibir os 5 meses mais acessados no geral")
+                }
+                return resposta.json();
+            })
+            .then(function (acessos) {
+
+                if (acessos.length > 0) {
+
+                    const meses = [
+                        'Janeiro',
+                        'Fevereiro',
+                        'Março',
+                        'Abril',
+                        'Maio',
+                        'Junho',
+                        'Julho',
+                        'Agosto',
+                        'Setembro',
+                        'Outubro',
+                        'Novembro',
+                        'Dezembro'
+                    ];
+
+                    const labels = [];
+                    const data = [];
+
+                    let quantidadeDeAcessos = 0;
+                    let quantidadeTotalDeAcessos = 0;
+                    let quantidadeMediaDeAcessos = 0;
+                    let nomeDoMesMaisAcessado = "";
+
+                    for (let i = 0; i < acessos.length; i++) {
+                        labels.push(meses[acessos[i].mes - 1]);
+                        data.push(acessos[i].total_acessos);
+
+                        if (acessos[i].total_acessos > quantidadeDeAcessos) {
+                            quantidadeDeAcessos = acessos[i].total_acessos;
+                            nomeDoMesMaisAcessado = meses[acessos[i].mes - 1];
+                        }
+                        quantidadeTotalDeAcessos += acessos[i].total_acessos;
+                    }
+
+                    const mesMaisAcessado = document.getElementById('mesMaisAcessado');
+                    mesMaisAcessado.innerHTML = `⭐ Mês com mais acessos: ${nomeDoMesMaisAcessado} (${quantidadeDeAcessos} acessos)`;
+                    const totalDeAcessos = document.getElementById('totalDeAcessos');
+                    totalDeAcessos.innerHTML = `🔥 Quantidade total de acessos: ${quantidadeTotalDeAcessos}`;
+                    const mediaDeAcessos = document.getElementById('mediaDeAcessos');
+                    mediaDeAcessos.innerHTML = `📊 Quantidade média de acessos: ${(quantidadeTotalDeAcessos / acessos.length).toFixed(1)}`;
+
+                    const grafico = document.getElementById('graficoMeses').getContext('2d');
+
+                    new Chart(grafico, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Acessos',
+                                data: data,
+                                backgroundColor: '#36A2EB',
+                                borderColor: '#36A2EB',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 50,
+                                    ticks: {
+                                        stepSize: 1,
+                                    }
                                 }
                             }
                         }

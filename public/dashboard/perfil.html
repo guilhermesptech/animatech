@@ -10,7 +10,7 @@
 </head>
 
 <body
-    onload="validarSessao(); retornarImagemPerfil(); exibirPodioDoUsuario(); exibirGenerosPreferidosDoUsuario(); exibirMesMaisAcessadoPeloUsuario();">
+    onload="validarSessao(); exibirFotoDoUsuario(); exibirPodioDoUsuario(); exibirGenerosPreferidosDoUsuario(); exibirMesMaisAcessadoPeloUsuario();">
     <header>
         <nav class="container-navegacao">
             <div class="logotipo">
@@ -28,14 +28,7 @@
         <section class="container-perfil">
             <div class="container-perfil-conteudo">
                 <div class="container-foto-perfil">
-                    <img src="" id="foto-perfil" alt="Foto de perfil" onclick="abrirEscolhaFotoPerfil()">
-                </div>
-                <div class="container-selecionar-foto-perfil" id="div-selecionar-foto-perfil">
-                    <div class="selecionar-foto-perfil">
-                        <span class="container-fechar" onclick="fecharEscolhaFotoPerfil()">❌</span>
-                        <h3>Escolha sua nova foto de perfil</h3>
-                        <div class="lista-foto-perfil" id="div-lista-foto-perfil"></div>
-                    </div>
+                    <img src="" id="foto-perfil" alt="Foto de perfil">
                 </div>
                 <h3 id="b_usuario"></h3>
             </div>
@@ -90,76 +83,23 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 
-    const imagens = [
-        "imagens/perfil-masculino.png",
-        "imagens/perfil-feminino.png"
-    ];
+    function exibirFotoDoUsuario() {
 
-    function retornarImagemPerfil() {
+        let usuarioId = sessionStorage.getItem("ID_USUARIO");
 
-        fetch('/usuarios/retornarImagemPerfil', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                usuarioId: sessionStorage.ID_USUARIO
-            })
-        })
+        fetch(`/usuarios/exibirFotoDoUsuario/${usuarioId}`)
             .then(function (resposta) {
                 if (!resposta.ok) {
-                    throw new Error("Erro ao retornar imagem de perfil");
+                    console.log("Erro ao exibir a foto do usuário");
                 }
                 return resposta.json();
             })
             .then(function (data) {
                 document.getElementById('foto-perfil').src = data.imagem_url;
             })
-            .catch(function (error) {
-                alert(error.message);
+            .catch(function (erro) {
+                console.log("Erro ao carregar a foto do usuário", erro)
             });
-    }
-
-    function abrirEscolhaFotoPerfil() {
-        const lista = document.getElementById("div-lista-foto-perfil");
-        lista.innerHTML = "";
-        let resposta = "";
-
-        for (let i = 0; i < imagens.length; i++) {
-            let caminho = imagens[i];
-            resposta += `<img src="${caminho}" onclick="atualizarImagemPerfil('${caminho}')">`
-        }
-
-        lista.innerHTML = resposta;
-        document.getElementById("div-selecionar-foto-perfil").style.display = "flex";
-    }
-
-    function fecharEscolhaFotoPerfil() {
-        document.getElementById("div-selecionar-foto-perfil").style.display = "none";
-    }
-
-    function atualizarImagemPerfil(caminho) {
-
-        document.getElementById("foto-perfil").src = caminho;
-
-        fecharEscolhaFotoPerfil();
-
-        fetch('/usuarios/atualizarImagemPerfil', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                imagemUrl: caminho,
-                usuarioId: sessionStorage.ID_USUARIO
-            })
-        }).then(function (response) {
-            if (response.ok) {
-                console.log('Perfil atualizado com sucesso!');
-            } else {
-                alert('Erro ao atualizar perfil');
-            }
-        });
     }
 
     function exibirPodioDoUsuario() {

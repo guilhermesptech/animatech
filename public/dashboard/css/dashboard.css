@@ -140,6 +140,30 @@ h1 {
     font-size: 24px;
 }
 
+.container-meses-mais-acessados {
+    background-color: var(--cor-primaria);
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.grafico-meses-mais-acessados {
+    width: 1000px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    color: var(--cor-ternaria);
+}
+
+.grafico-meses-mais-acessados p {
+    font-size: 24px;
+}
+
 .indicadores-grafico {
     width: 100%;
     display: flex;

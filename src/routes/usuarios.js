@@ -24,4 +24,8 @@ router.get("/exibirMesMaisAcessadoPeloUsuario/:usuarioId", function (req, res) {
     usuarioController.exibirMesMaisAcessadoPeloUsuario(req, res);
 });
 
+router.get("/exibirMesMaisAcessadoNoGeral", function (req, res) {
+    usuarioController.exibirMesMaisAcessadoNoGeral(req, res);
+});
+
 module.exports = router;

@@ -12,16 +12,10 @@ router.post("/autenticar", function (req, res) {
     usuarioController.autenticar(req, res);
 });
 
-// Foto de perfil do usuário
-router.put("/atualizarImagemPerfil", function (req, res) {
-    usuarioController.atualizarImagemPerfil(req, res);
+router.get("/exibirFotoDoUsuario/:usuarioId", function (req, res) {
+    usuarioController.exibirFotoDoUsuario(req, res);
 });
 
-router.post("/retornarImagemPerfil", function (req, res) {
-    usuarioController.retornarImagemPerfil(req, res);
-});
-
-// Controle de acesso
 router.post("/salvarDataHoraAcesso", function (req, res) {
     usuarioController.salvarDataHoraAcesso(req, res);
 });
